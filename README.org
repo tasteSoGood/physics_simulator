@@ -1,0 +1,8 @@
+* Physics Simulator
+:properties:
+:custom_id: c583dd453721e349961ef0e67c6e0997
+:id: c583dd453721e349961ef0e67c6e0997
+:date: 2025-03-24 15:29:29 周一
+:end:
+
+一些简单的物理系统的动画模拟
