@@ -6,3 +6,13 @@
 :end:
 
 一些简单的物理系统的动画模拟
+
+依赖：
+
+1. Python 3
+2. Matplotlib, NumPy
+
+   #+name: 2e8069b9e313519d000399b18c7de403
+   #+begin_src shell
+     pip install matplotlib, numpy
+   #+end_src
