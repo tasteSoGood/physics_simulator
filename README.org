@@ -16,3 +16,19 @@
    #+begin_src shell
      pip install matplotlib, numpy
    #+end_src
+
+
+** 脚本列表
+:properties:
+:custom_id: 996b31b3fb4acc00ead54625216a2fab
+:id: 996b31b3fb4acc00ead54625216a2fab
+:date: 2025-03-24 16:07:09 周一
+:end:
+
+1. 用 1 维完全弹性碰撞计算圆周率：[[file:collision_pi.py][code]]
+
+   受 3B1B 的启发，做的简单模拟。Happy Pi day!
+
+2. 2 维完全弹性碰撞
+
+   在前一个的基础上做的一点小扩展
