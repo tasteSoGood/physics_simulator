@@ -29,6 +29,16 @@
 
    受 3B1B 的启发，做的简单模拟。Happy Pi day!
 
+   #+CAPTION:
+   #+ATTR_ORG: :width 500
+   #+NAME: f468007a10f5e666ff0c398dfa573b62
+   [[./example/collision_pi.png]]
+
 2. 2 维完全弹性碰撞
 
    在前一个的基础上做的一点小扩展
+
+   #+CAPTION:
+   #+ATTR_ORG: :width 500
+   #+NAME: ee9462cb9fa1e1253b5640afce694cd2
+   [[./example/collision_2d.png]]
