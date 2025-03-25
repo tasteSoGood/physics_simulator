@@ -36,7 +36,7 @@ class CollisionSimulator2D:
         self.xmin, self.xmax = xlim  # 边界
         self.ymin, self.ymax = ylim  # 边界
         self.g               = 98    # 重力加速度
-        self.dumping         = 0.995 # 阻尼
+        self.damping         = 0.995 # 阻尼
         self.N               = N     # 物体数量
         self.radius          = 0.05  # 小球的直径
         self.dt              = 1e-3  # 时间步长
@@ -77,7 +77,7 @@ class CollisionSimulator2D:
         self.handle_wall_collision()  # 处理与墙的碰撞
         self.handle_block_collision() # 处理小球间的碰撞
         self.handle_gravity()         # 加入重力
-        # self.handle_dumping()         # 加入阻尼
+        # self.handle_damping()         # 加入阻尼
         self.update_positions()       # 更新位置
         if self.selected_ball is not None:
             self.pos[self.selected_ball] = selected_pos
@@ -164,9 +164,9 @@ class CollisionSimulator2D:
         """引入重力"""
         self.vol[:, 1] -= self.mass * self.g * self.dt 
 
-    def handle_dumping(self):
+    def handle_damping(self):
         """引入阻尼"""
-        self.vol = self.dumping * self.vol
+        self.vol = self.damping * self.vol
 
     def update_positions(self):
         """更新位置"""
