@@ -1,0 +1,121 @@
+#------------------------------------------------
+# name: double_pendulum.py
+# author: taster
+# date: 2025-03-25 23:04:40 星期二
+# id: 93480b8ca54a77531cac7d95141ac23a
+# description: 双摆系统
+#------------------------------------------------
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
+from matplotlib.widgets import Button
+import matplotlib.animation as animation
+import numpy as np
+
+class DoublePendulum:
+    """双摆系统"""
+    def __init__(self, 
+                 L1=1.0, L2=1.0, 
+                 m1=1.0, m2=1.0,
+                 theta1=np.pi/2, theta2=np.pi/2,
+                 damping=0.998):
+        # 物理参数
+        self.g = 9.8       # 重力加速度
+        self.L1, self.L2 = L1, L2  # 摆杆长度
+        self.m1, self.m2 = m1, m2  # 摆锤质量
+        self.theta1, self.theta2 = theta1, theta2  # 初始角度
+        self.theta1_dot = 0.0  # 角速度
+        self.theta2_dot = 0.0
+        self.damping = damping  # 阻尼系数
+        self.dt = 1e-2         # 时间步长
+
+        self.initialize_figure()  # 初始化画布
+
+        # 创建图形元素
+        self.ball1 = Circle((0,0), radius=0.08, color="red", zorder=3)
+        self.ball2 = Circle((0,0), radius=0.08, color="blue", zorder=3)
+        self.rod1, = self.ax.plot([0,0], [0,0], lw=2, color="black")
+        self.rod2, = self.ax.plot([0,0], [0,0], lw=2, color="black")
+        
+        self.ax.add_patch(self.ball1)
+        self.ax.add_patch(self.ball2)
+
+    def get_positions(self):
+        """计算两个摆锤的坐标"""
+        x1 = self.L1 * np.sin(self.theta1)
+        y1 = -self.L1 * np.cos(self.theta1)
+        x2 = x1 + self.L2 * np.sin(self.theta2)
+        y2 = y1 - self.L2 * np.cos(self.theta2)
+        return (x1, y1), (x2, y2)
+
+    def update(self, frame):
+        """更新动画帧"""
+        delta_theta = self.theta1 - self.theta2  # 修正角度差方向
+
+        # 公共分母计算
+        denom = 2 * self.m1 + self.m2 - self.m2 * np.cos(2 * delta_theta)
+        
+        # 第一个摆的角加速度
+        theta1_double_dot = (
+            -self.g * (2 * self.m1 + self.m2) * np.sin(self.theta1)
+            - self.m2 * self.g * np.sin(self.theta1 - 2 * self.theta2)
+            - 2 * np.sin(delta_theta) * self.m2 * (
+                self.theta2_dot**2 * self.L2 
+                + self.theta1_dot**2 * self.L1 * np.cos(delta_theta)
+            )
+        ) / (self.L1 * denom)
+
+        # 第二个摆的角加速度
+        theta2_double_dot = (
+            2 * np.sin(delta_theta) * (
+                self.theta1_dot**2 * self.L1 * (self.m1 + self.m2)
+                + self.g * (self.m1 + self.m2) * np.cos(self.theta1)
+                + self.theta2_dot**2 * self.L2 * self.m2 * np.cos(delta_theta)
+            )
+        ) / (self.L2 * denom)
+
+        # 欧拉法更新角速度
+        self.theta1_dot += theta1_double_dot * self.dt
+        self.theta2_dot += theta2_double_dot * self.dt
+        
+        # 更新角度（注意阻尼）
+        self.theta1 += self.theta1_dot * self.dt
+        self.theta2 += self.theta2_dot * self.dt
+        self.theta1_dot *= self.damping
+        self.theta2_dot *= self.damping
+
+        # 更新图形
+        pos1, pos2 = self.get_positions()
+        self.rod1.set_data([0, pos1[0]], [0, pos1[1]])
+        self.rod2.set_data([pos1[0], pos2[0]], [pos1[1], pos2[1]])
+        self.ball1.set_center(pos1)
+        self.ball2.set_center(pos2)
+        
+        return self.rod1, self.rod2, self.ball1, self.ball2
+
+    def initialize_figure(self):
+        """初始化画布"""
+        self.fig, self.ax = plt.subplots(figsize=(8,8))
+        self.ax.set_xlim(-2.5, 2.5)
+        self.ax.set_ylim(-2.5, 2.5)
+        self.ax.set_aspect('equal')
+        self.ax.grid(True)
+        self.ax.set_title("Double Pendulum Chaos Demo")
+
+    def play(self, frames=1000, interval=3):
+        """运行动画"""
+        ani = animation.FuncAnimation(
+            self.fig, self.update, 
+            frames=frames, interval=interval, 
+            blit=True
+        )
+        plt.show()
+
+if __name__ == "__main__":
+    # 示例：创建初始角度为 170 度的混沌双摆
+    pendulum = DoublePendulum(
+        L1=1.0, L2=1.0,
+        theta1=170*np.pi/180,  # 转换为弧度
+        theta2=150*np.pi/180,
+        damping=1.0,
+    )
+    pendulum.play()
