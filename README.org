@@ -42,3 +42,13 @@
    #+ATTR_ORG: :width 500
    #+NAME: ee9462cb9fa1e1253b5640afce694cd2
    [[./example/collision_2d.png]]
+
+3. 单摆系统 [[file:single_pendulum.py][code]]
+
+4. 双摆系统 [[file:double_pendulum.py][code]]
+
+   这个系统来自朗道《力学》第一章的第一道习题
+
+5. 水平移动摆系统 [[file:moving_pendulum.py][code]]
+
+   这个系统来自朗道《力学》第一章的第二道习题
