@@ -12,26 +12,13 @@ import matplotlib.animation as animation
 import numpy as np
 import datetime
 import matplotlib.gridspec as gridspec
+from utils import random_color, weighted_color
+from animator import Animator2D
 
-def random_color(seed=None):
-    if seed:
-        np.random.seed(seed)
-    return "#%02x%02x%02x" % (
-        np.random.randint(0, 256),
-        np.random.randint(0, 256),
-        np.random.randint(0, 256)
-    )
 
-def weighted_color(mass, max_mass):
-    """根据质量来区别颜色"""
-    return "#%02x%02x%02x" % (
-        255 - int(255 * mass / max_mass),
-        0, # 255 - int(255 * mass / max_mass),
-        0, # 255 - int(255 * mass / max_mass),
-    )
-
-class CollisionSimulator2D:
+class CollisionSimulator2D(Animator2D):
     def __init__(self, xlim=[0, 1], ylim=[0, 1], N=2):
+        super(CollisionSimulator2D, self).__init__()
         # 全局参数设置
         self.xmin, self.xmax = xlim  # 边界
         self.ymin, self.ymax = ylim  # 边界
@@ -42,7 +29,9 @@ class CollisionSimulator2D:
         self.dt              = 1e-3  # 时间步长
 
         self.initialize_parameters() # 随机生成位置、质量、速度
-        self.initialize_figure()     # 初始化matplotlib画布
+        self.initialize_figure(
+            xlim=xlim, ylim=ylim, title="Collision 2D"
+        )     # 初始化matplotlib画布
         self.initialize_balls()      # 初始化小球位置
 
         # 添加重置按钮
@@ -243,26 +232,6 @@ class CollisionSimulator2D:
         for ball in self.balls:
             self.ax.add_patch(ball)
 
-    def initialize_figure(self):
-        """创建图形和坐标轴"""
-        plt.rcParams["font.sans-serif"]=["Source Code Pro", "SimHei"]  # 正常显示中文
-        plt.rcParams["axes.unicode_minus"] = False # 该语句解决图像中的负号乱码问题
-        # self.fig = plt.figure(figsize=(12, 5))
-        # gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1], width_ratios=[1, 2])
-        # self.ax = self.fig.add_subplot(gs[:, 0])
-        self.fig, self.ax = plt.subplots()
-        self.ax.set_xlim(self.xmin, self.xmax)  # 设置x轴范围
-        self.ax.set_ylim(self.ymin, self.xmax)  # 设置y轴范围
-        self.ax.set_aspect('equal', adjustable='box')  # 确保比例为1:1
-        self.ax.set_title("Collision 2D")
-        self.ax.grid(True)
-
-        # # 添加一个新的子图用于绘制能量变化
-        # self.curve_ax = self.fig.add_subplot(gs[:, 1])
-        # self.curve_ax.set_aspect(aspect='auto')
-        # self.curve_ax.set_title('Energy curve')
-        # self.curve_ax.grid(True)
-
     """
     交互相关函数
     """
@@ -306,11 +275,6 @@ class CollisionSimulator2D:
     def cal_momentum(self):
         """计算动量和"""
         return (self.vol * self.mass[:, np.newaxis]).sum(axis=0)
-
-    def play(self, frames=1000, interval=10):
-        """运行动画"""
-        ani = animation.FuncAnimation(self.fig, self.update, frames=frames, interval=interval, blit=True)
-        plt.show()
 
 if __name__ == "__main__":
     # 使用示例
