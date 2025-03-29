@@ -32,7 +32,7 @@
    #+CAPTION:
    #+ATTR_ORG: :width 500
    #+NAME: f468007a10f5e666ff0c398dfa573b62
-   [[./example/collision_pi.png]]
+   [[./example/collision_pi.mp4]]
 
 2. 2 维完全弹性碰撞
 
@@ -41,13 +41,13 @@
    #+CAPTION:
    #+ATTR_ORG: :width 500
    #+NAME: ee9462cb9fa1e1253b5640afce694cd2
-   [[./example/collision_2d.png]]
+   [[./example/collision_2d.mp4]]
 
 3. 单摆系统 [[file:single_pendulum.py][code]]
 
    #+CAPTION:
    #+ATTR_ORG: :width 500
-   [[./example/single_pendulum.png]]
+   [[./example/single_pendulum.mp4]]
 
 4. 双摆系统 [[file:double_pendulum.py][code]]
 
@@ -55,7 +55,7 @@
 
    #+CAPTION:
    #+ATTR_ORG: :width 500
-   [[./example/double_pendulum.png]]
+   [[./example/double_pendulum.mp4]]
 
 5. 水平移动摆系统 [[file:moving_pendulum.py][code]]
 
@@ -63,7 +63,7 @@
 
    #+CAPTION:
    #+ATTR_ORG: :width 500
-   [[./example/moving_pendulum.png]]
+   [[./example/moving_pendulum.mp4]]
 
 6. 多体运动模拟 [[file:gravity.py][code]]
 
@@ -73,4 +73,4 @@
 
    #+CAPTION:
    #+ATTR_ORG: :width 500
-   [[./example/gravity.png]]
+   [[./example/gravity.mp4]]

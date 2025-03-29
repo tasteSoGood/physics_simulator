@@ -25,7 +25,7 @@ class CollisionSimulator(Animator2D):
         self.collision_count = 0  # 碰撞计数
         
         # 创建图形和坐标轴
-        self.initialize_figure([-1, 6], [-1, 1], title="Collision")
+        self.initialize_figure([-1, 6], [-1, 1], title="Collision", figsize=(8, 3))
         
         # 初始化方块
         self.rect1 = Rectangle((self.x1 - self.w/2, -0.25), self.w, 0.5, fill=True, color='blue')
@@ -87,4 +87,5 @@ if __name__ == "__main__":
     # 使用示例
     simulator = CollisionSimulator(x1=2, x2=5, m1=1.0, m2=100.0, dt=1e-3)
     simulator.play(interval=1)
+    # simulator.save_animation("./example/collision_pi.mp4", fps=30, interval=1, frames=500, dpi=200)
 

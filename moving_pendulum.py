@@ -35,7 +35,7 @@ class MovingPendulum(Animator2D):
         self.variable_added = False # 动画部件是否已被添加过
 
         # 初始化图形
-        self.initialize_figure([-5, 5], [-3, 1], figsize=(8, 6), title="Movable Pendulum System")
+        self.initialize_figure([-5, 5], [-3, 1], figsize=(6, 3), title="Movable Pendulum System")
         self.plot_variable()
 
     def plot_variable(self):
@@ -124,3 +124,4 @@ if __name__ == "__main__":
     # system = MovingPendulum(m1=0.5, m2=2, theta=np.pi/2*0.95)
     
     system.play(interval=5)
+    # system.save_animation("./example/moving_pendulum.mp4", fps=60, interval=1, frames=1000, dpi=200)

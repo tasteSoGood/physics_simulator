@@ -117,3 +117,4 @@ if __name__ == "__main__":
         damping=1.0,
     )
     pendulum.play(interval=3)
+    # pendulum.save_animation("./example/double_pendulum.mp4", fps=60, interval=1, frames=1000, dpi=200)

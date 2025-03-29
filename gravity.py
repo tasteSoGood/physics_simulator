@@ -127,3 +127,4 @@ if __name__ == "__main__":
     
     # 运行动画
     simulator.play(interval=5)
+    # simulator.save_animation("./example/gravity.mp4", fps=60, interval=1, frames=1000, dpi=200)

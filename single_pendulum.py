@@ -37,7 +37,7 @@ class SinglePendulum(Animator2D):
         self.theta_dot      = 0.0   # 角速度
         self.variable_added = False # 动画部件是否已被添加过
 
-        self.initialize_figure([-1.5, 1.5], [-1.5, 1.5], title="Single Pendulum") # 初始化matplotlib画布
+        self.initialize_figure([-1.5, 1.5], [-1.5, 1.5], title="Single Pendulum", figsize=(6, 6)) # 初始化matplotlib画布
         self.plot_variable()
 
     def plot_variable(self):
@@ -78,4 +78,5 @@ if __name__ == "__main__":
     # 使用示例
     simulator = SinglePendulum(length=1.0)
     simulator.play(interval=3)
+    # simulator.save_animation("./example/single_pendulum.mp4", fps=60, interval=1, frames=1000, dpi=200)
 

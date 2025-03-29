@@ -30,7 +30,7 @@ class CollisionSimulator2D(Animator2D):
 
         self.initialize_parameters() # 随机生成位置、质量、速度
         self.initialize_figure(
-            xlim=xlim, ylim=ylim, title="Collision 2D"
+            xlim=xlim, ylim=ylim, title="Collision 2D", figsize=(6, 6),
         )     # 初始化matplotlib画布
         self.initialize_balls()      # 初始化小球位置
 
@@ -281,4 +281,5 @@ if __name__ == "__main__":
     # 这里的动量和不相等不是因为碰撞过程计算有误，而是因为小球会被墙反弹，反弹之后会改变其动量
     simulator = CollisionSimulator2D(N=5)
     simulator.play()
+    # simulator.save_animation("./example/collision_2d.mp4", fps=30, interval=1, frames=500, dpi=200)
 
