@@ -29,39 +29,41 @@
 
    受 3B1B 的启发，做的简单模拟。Happy Pi day!
 
-   <p align="center">
-     <video src="./example/collision_pi.mp4" width="500px"></video>
-   </p>
+   #+CAPTION:
+   #+ATTR_ORG: :width 500
+   #+NAME: f468007a10f5e666ff0c398dfa573b62
+   [[./example/collision_pi.gif]]
 
 2. 2 维完全弹性碰撞
 
    在前一个的基础上做的一点小扩展
 
-   <p align="center">
-     <video src="./example/collision_2d.mp4" width="500px"></video>
-   </p>
+   #+CAPTION:
+   #+ATTR_ORG: :width 500
+   #+NAME: ee9462cb9fa1e1253b5640afce694cd2
+   [[./example/collision_2d.gif]]
 
 3. 单摆系统 [[file:single_pendulum.py][code]]
 
-   <p align="center">
-     <video src="./example/single_pendulum.mp4" width="500px"></video>
-   </p>
+   #+CAPTION:
+   #+ATTR_ORG: :width 500
+   [[./example/single_pendulum.gif]]
 
 4. 双摆系统 [[file:double_pendulum.py][code]]
 
    这个系统来自朗道《力学》第一章的第一道习题
 
-   <p align="center">
-     <video src="./example/double_pendulum.mp4" width="500px"></video>
-   </p>
+   #+CAPTION:
+   #+ATTR_ORG: :width 500
+   [[./example/double_pendulum.gif]]
 
 5. 水平移动摆系统 [[file:moving_pendulum.py][code]]
 
    这个系统来自朗道《力学》第一章的第二道习题
 
-   <p align="center">
-     <video src="./example/moving_pendulum.mp4" width="500px"></video>
-   </p>
+   #+CAPTION:
+   #+ATTR_ORG: :width 500
+   [[./example/moving_pendulum.gif]]
 
 6. 多体运动模拟 [[file:gravity.py][code]]
 
@@ -69,6 +71,6 @@
 
    这里考虑两点：1. 质点运动到边界时，类似小球碰撞到墙壁，会反弹回来；2. 质点速度超过一定阈值，则设置阻尼来降速。
 
-   <p align="center">
-     <video src="./example/gravity.mp4" width="500px"></video>
-   </p>
+   #+CAPTION:
+   #+ATTR_ORG: :width 500
+   [[./example/gravity.gif]]
