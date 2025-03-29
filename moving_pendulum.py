@@ -6,45 +6,59 @@
 # description: 可移动悬挂点的单摆系统 - 朗道《力学》第一章第2道习题
 #------------------------------------------------
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
+from matplotlib.patches import Circle, PathPatch
 import matplotlib.animation as animation
+from matplotlib.path import Path
 import numpy as np
+from animator import Animator2D
 
-class MovingPendulum:
+class MovingPendulum(Animator2D):
     def __init__(self, 
                  m1=2.0,   # 悬挂点质量
                  m2=1.0,   # 摆锤质量
                  L=1.0,    # 摆长
                  theta=np.pi/3,  # 初始角度
                  damping=0.995): # 阻尼系数
+        super(MovingPendulum, self).__init__()
         # 系统参数
-        self.g = 9.8
+        self.g           = 9.8
         self.m1, self.m2 = m1, m2
-        self.L = L
-        self.damping = damping
-        self.dt = 1e-2
+        self.L           = L
+        self.damping     = damping
+        self.dt          = 1e-2
 
-        # 初始状态
-        self.x1 = 0.0         # 悬挂点水平位置
-        self.x1_dot = 0.0     # 悬挂点速度
-        self.theta = theta    # 摆角（垂直向下为0）
-        self.theta_dot = 0.0  # 角速度
+        # 系统变量
+        self.x1             = 0.0   # 悬挂点水平位置
+        self.x1_dot         = 0.0   # 悬挂点速度
+        self.theta          = theta # 摆角（垂直向下为0）
+        self.theta_dot      = 0.0   # 角速度
+        self.variable_added = False # 动画部件是否已被添加过
 
         # 初始化图形
-        self.fig, self.ax = plt.subplots(figsize=(8,6))
-        self.ax.set_xlim(-5, 5)
-        self.ax.set_ylim(-3, 1)
-        self.ax.set_aspect('equal')
-        self.ax.grid(True)
-        self.ax.set_title("Movable Pendulum System")
+        self.initialize_figure([-5, 5], [-3, 1], figsize=(8, 6), title="Movable Pendulum System")
+        self.plot_variable()
+
+    def plot_variable(self):
+        # 更新图形位置
+        bob_x      = self.x1 + self.L*np.sin(self.theta)
+        bob_y      = -self.L*np.cos(self.theta)
+        anchor_pos = (self.x1, 0) # 悬挂点的位置
+        bob_pos    = (bob_x, bob_y) # 摆锤的位置
+        rod_path   = Path([anchor_pos, bob_pos], [Path.MOVETO, Path.LINETO]) # 摆杆的路径
 
         # 创建图形元素
-        self.anchor = Circle((0,0), 0.1, color='red', zorder=3)  # 悬挂点
-        self.bob = Circle((0,0), 0.1, color='blue', zorder=3)    # 摆锤
-        self.rod, = self.ax.plot([0,0], [0,0], lw=2, color='black')
-        
-        self.ax.add_patch(self.anchor)
-        self.ax.add_patch(self.bob)
+        if not self.variable_added:
+            self.anchor = Circle(anchor_pos, radius=0.1, color='red', zorder=3)      # 悬挂点
+            self.bob = Circle(bob_pos, radius=0.1, color='blue', zorder=3)           # 摆锤
+            self.rod = PathPatch(rod_path, lw=2, edgecolor="gray", facecolor='none') # 摆杆
+            
+            for patch in [self.anchor, self.bob, self.rod]:
+                self.ax.add_patch(patch)
+            self.variable_added = True
+        else:
+            self.anchor.set_center(anchor_pos)
+            self.bob.set_center(bob_pos)
+            self.rod.set_path(rod_path)
 
     def _calc_accelerations(self):
         """计算加速度核心算法"""
@@ -78,14 +92,7 @@ class MovingPendulum:
         self.x1_dot *= self.damping
         self.theta_dot *= self.damping
 
-        # 更新图形位置
-        bob_x = self.x1 + self.L*np.sin(self.theta)
-        bob_y = -self.L*np.cos(self.theta)
-        
-        self.anchor.set_center((self.x1, 0))
-        self.bob.set_center((bob_x, bob_y))
-        self.rod.set_data([self.x1, bob_x], [0, bob_y])
-
+        self.plot_variable()
         # if frame % 10 == 0:
         #     print(f"System Energy: {self._calc_energy():.3f} J")
 
@@ -104,13 +111,6 @@ class MovingPendulum:
         
         return K + U  # 总机械能
 
-    def play(self):
-        """运行动画"""
-        ani = animation.FuncAnimation(
-            self.fig, self.update,
-            frames=200, interval=20, blit=True
-        )
-        plt.show()
 
 # 演示不同参数配置
 if __name__ == "__main__":
@@ -123,4 +123,4 @@ if __name__ == "__main__":
     # 案例3：小质量悬挂点剧烈运动
     # system = MovingPendulum(m1=0.5, m2=2, theta=np.pi/2*0.95)
     
-    system.play()
+    system.play(interval=5)

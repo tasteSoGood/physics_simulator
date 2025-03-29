@@ -8,9 +8,11 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import matplotlib.animation as animation
+from animator import Animator2D
 
-class CollisionSimulator:
+class CollisionSimulator(Animator2D):
     def __init__(self, m1=1.0, m2=1.0, w=0.5, dt=0.1, x1=0.0, v1=0.0, x2=5.0, v2=-2.0):
+        super(CollisionSimulator, self).__init__()
         # 参数初始化
         self.m1 = m1
         self.m2 = m2
@@ -23,14 +25,7 @@ class CollisionSimulator:
         self.collision_count = 0  # 碰撞计数
         
         # 创建图形和坐标轴
-        plt.rcParams["font.sans-serif"]=["Source Code Pro", "SimHei"]  # 正常显示中文
-        plt.rcParams["axes.unicode_minus"] = False # 该语句解决图像中的负号乱码问题
-        self.fig, self.ax = plt.subplots()
-        self.ax.set_xlim(-1, 6)  # 设置x轴范围
-        self.ax.set_ylim(-1, 1)  # 设置y轴范围
-        self.ax.set_aspect('equal', adjustable='box')  # 确保比例为1:1
-        self.ax.set_title("Collision")
-        self.ax.grid(True)
+        self.initialize_figure([-1, 6], [-1, 1], title="Collision")
         
         # 初始化方块
         self.rect1 = Rectangle((self.x1 - self.w/2, -0.25), self.w, 0.5, fill=True, color='blue')
@@ -87,14 +82,9 @@ class CollisionSimulator:
         self.text_box.set_text(f'Collisions: {self.collision_count}')
         
         return self.rect1, self.rect2, self.text_box
-    
-    def run_simulation(self, frames=1000, interval=1):
-        """运行动画"""
-        ani = animation.FuncAnimation(self.fig, self.update, frames=frames, interval=interval, blit=True)
-        plt.show()
 
 if __name__ == "__main__":
     # 使用示例
     simulator = CollisionSimulator(x1=2, x2=5, m1=1.0, m2=100.0, dt=1e-3)
-    simulator.run_simulation()
+    simulator.play(interval=1)
 

@@ -26,7 +26,7 @@ class Animator2D:
         self.ax.set_ylim(*ylim)  # 设置y轴范围
         self.ax.set_aspect('equal', adjustable='box')  # 确保比例为1:1
         if title and isinstance(title, str):
-            self.ax.set_title("Collision 2D")
+            self.ax.set_title(title)
         self.ax.grid(True)
 
     @abstractmethod
