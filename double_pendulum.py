@@ -12,6 +12,7 @@ import matplotlib.animation as animation
 import matplotlib.path as path
 import numpy as np
 from animator import Animator2D
+import matplotlib.gridspec as gridspec
 
 
 class DoublePendulum(Animator2D):
@@ -19,7 +20,6 @@ class DoublePendulum(Animator2D):
     def __init__(self, 
                  L1=1.0, L2=1.0, 
                  m1=1.0, m2=1.0,
-                 theta1=np.pi/2, theta2=np.pi/2,
                  damping=0.998):
         super(DoublePendulum, self).__init__()
         # 物理参数
@@ -30,12 +30,49 @@ class DoublePendulum(Animator2D):
         self.dt = 1e-2             # 时间步长
 
         # 系统变量
-        self.theta1, self.theta2         = theta1, theta2  # 初始角度
-        self.theta1_dot, self.theta2_dot = 0.0, 0.0        # 角速度
+        # self.theta1, self.theta2         = theta1, theta2  # 初始角度
+        # self.theta1_dot, self.theta2_dot = 0.0, 0.0        # 角速度
         self.variable_added = False # 动画部件是否已被添加过
+        self.random_init()
 
         self.initialize_figure([-2.5, 2.5], [-2.5, 2.5], figsize=(8, 8), title="Double Pendulum Chaos Demo")  # 初始化画布
         self.plot_variable()
+
+    def initialize_figure(self, xlim: tuple | list, ylim: tuple | list, figsize=None, title=None, grid=True):
+        # 调整布局：左侧主图，右侧相图
+        self.fig = plt.figure(figsize=(10, 5))
+        self.gs = gridspec.GridSpec(1, 2, width_ratios=[1, 1]) 
+        self.ax = self.fig.add_subplot(self.gs[0])
+        self.ax_phase = self.fig.add_subplot(self.gs[1])  # 相图子图
+        
+        self.ax.set(xlim=xlim, ylim=ylim)
+        self.ax.set_aspect('equal')
+        self.ax.set_title("Single Pendulum")
+
+        # 配置相图
+        self.ax_phase.set(xlim=[-10, 10], ylim=[-10, 10], xlabel=r'$\theta$', ylabel=r'$\dot{\theta}$')
+        self.ax_phase.set_aspect('equal')
+        self.ax_phase.grid(True)
+        self.ax_phase.set_title("Phase Diagram")
+
+        # 添加重置按钮
+        ax_reset = plt.axes([0.465, 0.01, 0.1, 0.04])  # 按钮位置
+        self.reset_button = Button(ax_reset, 'Reset')
+        self.reset_button.on_clicked(self.reset)
+
+    def reset(self, event):
+        self.random_init()
+
+    def random_init(self):
+        # 系统变量
+        self.theta1 = np.random.uniform(-np.pi, np.pi) # 初始角度
+        self.theta2 = np.random.uniform(-np.pi, np.pi)
+        self.theta1_dot = 0.0 # 角速度
+        self.theta2_dot = 0.0
+        self.theta1_history = []
+        self.theta2_history = []
+        self.theta1_dot_history = []
+        self.theta2_dot_history = []
 
     def plot_variable(self):
         """依据系统变量绘制动画部件"""
@@ -53,11 +90,17 @@ class DoublePendulum(Animator2D):
             for patch in [self.ball1, self.ball2, self.rod1, self.rod2]:
                 self.ax.add_patch(patch)
             self.variable_added = True
+            # 绘制相图
+            self.phase1, = self.ax_phase.plot(self.theta1_history, self.theta1_dot_history, 'r-', lw=1)
+            self.phase2, = self.ax_phase.plot(self.theta2_history, self.theta2_dot_history, 'b-', lw=1)
         else:
             self.rod1.set_path(pole1)
             self.rod2.set_path(pole2)
             self.ball1.set_center(pos1)
             self.ball2.set_center(pos2)
+            # 绘制相图
+            self.phase1.set_data(self.theta1_history, self.theta1_dot_history)
+            self.phase2.set_data(self.theta2_history, self.theta2_dot_history)
 
     def get_positions(self):
         """计算两个摆锤的坐标"""
@@ -104,17 +147,18 @@ class DoublePendulum(Animator2D):
         self.theta1_dot *= self.damping
         self.theta2_dot *= self.damping
 
+        # 更新相图
+        self.theta1_history.append(self.theta1)
+        self.theta2_history.append(self.theta2)
+        self.theta1_dot_history.append(self.theta1_dot)
+        self.theta2_dot_history.append(self.theta2_dot)
+
         # 更新图形
         self.plot_variable()
-        return self.rod1, self.rod2, self.ball1, self.ball2
+        return self.rod1, self.rod2, self.ball1, self.ball2, self.phase1, self.phase2
 
 if __name__ == "__main__":
     # 示例：创建初始角度为 170 度的混沌双摆
-    pendulum = DoublePendulum(
-        L1=1.0, L2=1.0,
-        theta1=170*np.pi/180,  # 转换为弧度
-        theta2=150*np.pi/180,
-        damping=1.0,
-    )
+    pendulum = DoublePendulum(L1=1.0, L2=1.0, damping=1.0)
     pendulum.play(interval=3)
     # pendulum.save_animation("./example/double_pendulum.mp4", fps=60, interval=1, frames=1000, dpi=200)

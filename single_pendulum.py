@@ -46,7 +46,7 @@ class SinglePendulum(Animator2D):
         self.ax = self.fig.add_subplot(self.gs[0])
         self.ax_phase = self.fig.add_subplot(self.gs[1])  # 相图子图
         
-        self.ax.set(xlim=[-1.5, 1.5], ylim=[-1.5, 1.5])
+        self.ax.set(xlim=xlim, ylim=ylim)
         self.ax.set_aspect('equal')
         self.ax.set_title("Single Pendulum")
 
