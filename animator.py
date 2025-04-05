@@ -6,6 +6,8 @@
 # description: 动画基类
 #------------------------------------------------
 from abc import abstractmethod
+from typing import Tuple
+from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
@@ -31,7 +33,7 @@ class Animator2D:
         self.fig.tight_layout()
 
     @abstractmethod
-    def update(self, frame):
+    def update(self, frame) -> Tuple[Line2D]:
         """更新函数，需重载"""
         pass
 
