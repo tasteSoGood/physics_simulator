@@ -8,6 +8,7 @@
 from abc import abstractmethod
 from typing import Tuple
 from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
@@ -33,7 +34,7 @@ class Animator2D:
         self.fig.tight_layout()
 
     @abstractmethod
-    def update(self, frame) -> Tuple[Line2D]:
+    def update(self, frame) -> Tuple[Line2D | Patch]:
         """更新函数，需重载"""
         pass
 
